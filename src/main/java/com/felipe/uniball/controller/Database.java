@@ -1,4 +1,4 @@
-package com.felipe.uniball;
+package com.felipe.uniball.controller;
 
 import java.sql.*;
 
@@ -8,7 +8,7 @@ public class Database {
     public Database() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:/home/felipe/IdeaProjects/UniBall/db/database.db");
-            System.out.println("Conexão realizada !!!!");
+            System.out.println("Conexão realizada");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

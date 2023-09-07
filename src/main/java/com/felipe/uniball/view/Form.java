@@ -1,17 +1,19 @@
-package com.felipe.uniball;
+package com.felipe.uniball.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
+import com.felipe.uniball.controller.Auth;
 import net.miginfocom.swing.MigLayout;
-public class Test extends JFrame {
-    public Test() {
+
+public class Form extends JFrame {
+    public Form() {
         super("Login Form");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new MigLayout("fill, insets 10", "[grow]", "[grow]"));
-        getContentPane().setBackground(new Color(0x123456));
-        setSize(1920, 1080);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        getContentPane().setBackground(new Color(0x096B06));
 
         JPanel mainPanel = new JPanel(new MigLayout("fill, insets 20", "[grow]", "[align center]"));
         mainPanel.setBackground(Color.WHITE);
@@ -21,16 +23,16 @@ public class Test extends JFrame {
         titlePage.setForeground(Color.WHITE); // Set label text color
         add(titlePage, "align center"); // Wrap to next row
 
-        JLabel titleLabel = new JLabel("Login Form");
+        JLabel titleLabel = new JLabel("Formulário de Login");
         titleLabel.setFont(new Font("Sans", Font.BOLD, 40));
         titleLabel.setForeground(Color.BLACK); // Set label text color
         mainPanel.add(titleLabel, "align center, wrap"); // Wrap to next row
 
         JPanel inputPanel = new JPanel(new MigLayout("fillx, insets 20", "[grow]", "[]10[]"));
-        JLabel userLabel = new JLabel("User:");
+        JLabel userLabel = new JLabel("Usuário:");
         userLabel.setFont(new Font("Sans", Font.BOLD, 20));
 
-        JLabel passwordLabel = new JLabel("Password:");
+        JLabel passwordLabel = new JLabel("Senha:");
         passwordLabel.setFont(new Font("Sans", Font.BOLD, 20));
 
         JTextField userField = new JTextField(20); // Increase the columns to make the field wider
@@ -51,24 +53,34 @@ public class Test extends JFrame {
         JButton loginButton = new JButton("Login");
         loginButton.setFont(new Font("Sans", Font.BOLD, 20));
         loginButton.setPreferredSize(new Dimension(300, 40));
-        loginButton.setBackground(new Color(0x123456));
+        loginButton.setBackground(new Color(0x096B06));
         loginButton.setForeground(Color.lightGray);
         loginButton.addActionListener(e -> {
-            System.out.println("User: " + userField.getText());
-            System.out.println("Password: " + new String(passwordField.getPassword()));
-            Auth.login(userField.getText(), Arrays.toString(passwordField.getPassword()));
+            try {
+                if (!Auth.login(userField.getText(), Arrays.toString(passwordField.getPassword()))) {
+                    System.out.println(userField.getText() + Arrays.toString(passwordField.getPassword()));
+                    JOptionPane.showMessageDialog(this, "Login failed");
+                    return;
+                }
+                new Menu();
+                dispose();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         });
 
         JButton registerButton = new JButton("Register");
         registerButton.setFont(new Font("Sans", Font.BOLD, 20));
         registerButton.setPreferredSize(new Dimension(300, 40));
-        registerButton.setBackground(new Color(0x123456));
+        registerButton.setBackground(new Color(0x096B06));
         registerButton.setForeground(Color.lightGray);
         registerButton.addActionListener(e -> {
-//            System.out.println("Register button pressed");
-            System.out.println("User: " + userField.getText());
-            System.out.println("Password: " + new String(passwordField.getPassword()));
-            Auth.register(userField.getText(), Arrays.toString(passwordField.getPassword()));
+            try {
+                new Components.RegistrationDialog(this).setVisible(true);
+//                Auth.register(userField.getText(), Arrays.toString(passwordField.getPassword()));
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         });
 
         mainPanel.add(registerButton, "align center, split 2");
