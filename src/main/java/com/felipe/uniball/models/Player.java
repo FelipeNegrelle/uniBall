@@ -1,34 +1,19 @@
 package com.felipe.uniball.models;
 
 public class Player {
-    private final int idPlayer;
-    private int idTeam;
+    private int id;
     private String name;
     private String position;
     private int number;
     private int score;
 
-    public Player(int idPlayer, int idTeam, String name, String position, int number, int score) {
-        this.idPlayer = idPlayer;
-        this.idTeam = idTeam;
-        this.name = name;
-        this.position = position;
-        this.number = number;
-        this.score = score;
+    public int getId() {
+        return id;
     }
 
-    public int getIdPlayer() {
-        return idPlayer;
+    public void setId(int id) {
+        this.id = id;
     }
-
-    public int getIdTeam() {
-        return idTeam;
-    }
-
-    public void setIdTeam(int idTeam) {
-        this.idTeam = idTeam;
-    }
-
     public String getName() {
         return name;
     }

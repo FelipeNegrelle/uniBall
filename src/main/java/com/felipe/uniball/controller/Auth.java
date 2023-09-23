@@ -1,40 +1,38 @@
 package com.felipe.uniball.controller;
 
+import com.felipe.uniball.Constants;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.swing.*;
 import java.sql.ResultSet;
 
 public class Auth {
-    public static boolean register(String name, String number, String position, String username, String password) {
-        final String hashed_password = BCrypt.hashpw(password, BCrypt.gensalt());
+    public static boolean register(String name, String number, String position, String username, String password, String secretPhrase, String secretAnswer) {
+        final String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        final String queryRegister = "INSERT INTO players (name, number, position, score, user, password) VALUES (?, ?, ?, ?, ?, ?)";
+        final String queryRegister = "INSERT INTO players (name, number, position, score, user, password, secret_phrase, secret_answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         final String queryCheck = "SELECT user FROM players WHERE user = ?";
         try {
-            Database db = new Database();
+            ResultSet rs = Database.execute(queryCheck, new Object[]{ username }, false);
 
-            ResultSet count = db.execute(queryCheck, new Object[]{ username }, false);
-
-            if (count.next()) {
+            if (rs.next()) {
                 JDialog dialog = new JDialog();
                 dialog.setAlwaysOnTop(true);
-                final String user = count.getString("user");
-                JOptionPane.showMessageDialog(dialog, "Username " + user + " already exists.");
-                db.close();
+                final String user = rs.getString("user");
+                JOptionPane.showMessageDialog(dialog, "Usuário " + user + " ja existe, escolhe um novo nome.");
                 return false;
             }
 
-            db.execute(queryRegister, new Object[]{
+            Database.execute(queryRegister, new Object[]{
                     name,
                     number,
                     position,
                     0,
                     username,
-                    hashed_password
+                    hashedPassword,
+                    secretPhrase,
+                    secretAnswer.trim().toLowerCase()
             }, true);
-
-            db.close();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -45,25 +43,13 @@ public class Auth {
         final String query = "SELECT user, password FROM players WHERE user = ?";
 
         try {
-            Database db = new Database();
-            ResultSet rs = db.execute(query, new Object[]{
+            ResultSet rs = Database.execute(query, new Object[]{
                     username
             }, false);
 
             if (rs.next()) {
                 final String hashed_password = rs.getString("password");
-
-                if (BCrypt.checkpw(password, hashed_password)) {
-                    JDialog dialog = new JDialog();
-                    dialog.setAlwaysOnTop(true);
-                    JOptionPane.showMessageDialog(dialog, "Login successful");
-                    return true;
-                }
-            } else {
-                JDialog dialog = new JDialog();
-                dialog.setAlwaysOnTop(true);
-                JOptionPane.showMessageDialog(dialog, "Login failed");
-                return false;
+                return BCrypt.checkpw(password, hashed_password);
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -72,4 +58,48 @@ public class Auth {
         return false;
     }
 
+    public static boolean edit(int id, String name, String number, String position) {
+        final String query = "UPDATE players SET name = ?, number = ?, position = ? WHERE id_player = ?";
+        try {
+            Database.getConnection();
+            Database.execute(query, new Object[]{
+                    name,
+                    number,
+                    position,
+                    id
+            }, true);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return true;
+    }
+
+    public static boolean checkSecretAnswer(String username, String secretAnswer) {
+        final String query = "SELECT secret_answer FROM players WHERE user = ?";
+        try {
+            Database.getConnection();
+            ResultSet rs = Database.execute(query, new Object[]{username}, false);
+            if (rs.next()) {
+                return rs.getString("secret_answer").equals(secretAnswer);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public static boolean forgotPassword(String username, String secretAnswer, String newPassword) {
+        final String query = "UPDATE players SET password = ? WHERE user = ? AND secret_answer = ?";
+        try {
+            Database.getConnection();
+            Database.execute(query, new Object[]{
+                    newPassword,
+                    username,
+                    secretAnswer
+            }, true);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return true;
+    }
 }

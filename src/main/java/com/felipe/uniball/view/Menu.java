@@ -10,22 +10,24 @@ public class Menu extends JFrame {
     public Menu() {
         super("Menu Inicial");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Make the frame fullscreen
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow]"));
 
-        JPanel mainPanel = new JPanel(new MigLayout("gapx 50, gapy 50, align center", "[fill]")); // 3 columns
+        JPanel mainPanel = new JPanel(new MigLayout("gapx 50, gapy 50, align center", "[fill]"));
         JPanel sairPanel = new JPanel(new MigLayout("fill", "[grow]"));
-
         JPanel titlePanel = new JPanel(new MigLayout("fill", "[fill]"));
 
         JLabel titleLabel = new JLabel("UNIBALL");
         titleLabel.setFont(new Font("Sans", Font.BOLD, 80));
-//        titlePanel.setBackground(Color.BLACK);
         titleLabel.setForeground(Color.BLACK);
         titlePanel.add(titleLabel, "wrap, align center");
 
         JButton jogadores = new JButton("Jogadores");
+        jogadores.addActionListener(e -> {
+            dispose();
+            new Players();
+        });
+
         JButton partida = new JButton("Nova partida");
         JButton ranking = new JButton("Ranking");
         JButton sair = new JButton("Sair");
@@ -34,7 +36,6 @@ public class Menu extends JFrame {
         jogadores.setBackground(new Color(0x096B06));
         jogadores.setForeground(Color.WHITE);
         jogadores.setFont(new Font("Tahoma", Font.BOLD, 50));
-
 
         partida.setPreferredSize(new Dimension(400, 150));
         partida.setBackground(new Color(0x096B06));
@@ -50,15 +51,13 @@ public class Menu extends JFrame {
         sair.setBackground(new Color(0xBE0606));
         sair.setForeground(Color.WHITE);
         sair.setFont(new Font("Tahoma", Font.BOLD, 50));
-        sair.addActionListener(e -> {
-            System.exit(0);
-        });
+        sair.addActionListener(e -> System.exit(0));
 
         mainPanel.add(titlePanel, "wrap, align center");
         mainPanel.add(jogadores);
         mainPanel.add(partida);
         mainPanel.add(ranking, "wrap");
-        sairPanel.add(sair, "");
+        sairPanel.add(sair);
         mainPanel.add(sairPanel);
         add(mainPanel);
 

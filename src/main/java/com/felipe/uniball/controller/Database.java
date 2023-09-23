@@ -5,16 +5,23 @@ import java.sql.*;
 public class Database {
     private static Connection connection;
 
-    public Database() {
+    private Database() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:/home/felipe/IdeaProjects/UniBall/db/database.db");
-            System.out.println("Conexão realizada");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir") + "/db/database.db");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    public static Connection getConnection() {
+        if (connection == null) {
+            new Database();
+        }
+        return connection;
+    }
+
     public static ResultSet execute(String query, Object[] values, boolean isRegister) {
+        Connection connection = getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             for (int i = 0; i < values.length; i++) {
@@ -27,12 +34,12 @@ public class Database {
                 return statement.executeQuery();
             }
         } catch (SQLException e) {
-            System.out.println("error:" + e);
+            System.out.println("Database error: " + e);
         }
         return null;
     }
 
-    public void close() {
+    public static void close() {
         try {
             if (connection != null) {
                 connection.close();
