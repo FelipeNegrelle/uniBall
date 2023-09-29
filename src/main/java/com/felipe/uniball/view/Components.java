@@ -138,7 +138,7 @@ public class Components {
     public static class EditPlayerDialog extends JDialog {
         private static JTextField nameField;
         private static JTextField numberField;
-        private static JTextField positionField;
+        private static JComboBox<String> positionField;
 
         public EditPlayerDialog(Frame parent, Player player) {
             super(parent, "Editar Jogador", true);
@@ -156,9 +156,15 @@ public class Components {
 
             JLabel positionLabel = new JLabel(POSITION);
             positionLabel.setFont(new Font("Sans", Font.BOLD, 20));
-            positionField = new JTextField(player.getPosition(), 30);
+            positionField = new JComboBox<>();
+            positionField.addItem("Atacante");
+            positionField.addItem("Meio-campo");
+            positionField.addItem("Lateral");
+            positionField.addItem("Zagueiro");
+            positionField.addItem("Goleiro");
             positionField.setPreferredSize(new Dimension(300, 10));
             positionField.setFont(new Font("Sans", Font.PLAIN, 20));
+            positionField.setSelectedItem(player.getPosition());
 
             JButton editButton = new JButton(EDIT);
             editButton.setFont(new Font("Sans", Font.BOLD, 20));
@@ -185,7 +191,7 @@ public class Components {
                         id,
                         nameField.getText(),
                         numberField.getText(),
-                        positionField.getText()
+                        positionField.getSelectedItem().toString()
                 );
 
                 if (registrationSuccess) {

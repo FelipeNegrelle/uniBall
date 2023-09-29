@@ -6,6 +6,8 @@ import net.miginfocom.swing.MigLayout;
 
 import java.awt.*;
 
+import static com.felipe.uniball.Constants.NEW_GAME;
+
 public class Menu extends JFrame {
     public Menu() {
         super("Menu Inicial");
@@ -28,7 +30,11 @@ public class Menu extends JFrame {
             new Players();
         });
 
-        JButton partida = new JButton("Nova partida");
+        JButton partida = new JButton(NEW_GAME);
+        partida.addActionListener(e -> {
+            dispose();
+            new NewGame();
+        });
         JButton ranking = new JButton("Ranking");
         JButton sair = new JButton("Sair");
 

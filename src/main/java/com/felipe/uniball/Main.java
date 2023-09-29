@@ -9,5 +9,6 @@ public class Main {
         SwingUtilities.invokeLater(Form::new);
 //        SwingUtilities.invokeLater(Menu::new);
 //        SwingUtilities.invokeLater(com.felipe.uniball.view.Players::new);
+//        SwingUtilities.invokeLater(com.felipe.uniball.view.NewGame::new);
     }
 }

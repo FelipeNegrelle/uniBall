@@ -10,7 +10,7 @@ import net.miginfocom.swing.MigLayout;
 
 public class Form extends JFrame {
     public Form() {
-        super("Login Form");
+        super(Constants.LOGIN);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new MigLayout("fill, insets 10", "[grow]", "[grow]"));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -24,16 +24,16 @@ public class Form extends JFrame {
         titlePage.setForeground(Color.WHITE);
         add(titlePage, "align center");
 
-        JLabel titleLabel = new JLabel("Formulário de Login");
+        JLabel titleLabel = new JLabel(Constants.LOGIN);
         titleLabel.setFont(new Font("Sans", Font.BOLD, 40));
         titleLabel.setForeground(Color.BLACK);
         mainPanel.add(titleLabel, "align center, wrap");
 
         JPanel inputPanel = new JPanel(new MigLayout("fillx, insets 20", "[grow]", "[]10[]"));
-        JLabel userLabel = new JLabel("Usuário:");
+        JLabel userLabel = new JLabel(Constants.USER);
         userLabel.setFont(new Font("Sans", Font.BOLD, 20));
 
-        JLabel passwordLabel = new JLabel("Senha:");
+        JLabel passwordLabel = new JLabel(Constants.PASSWORD);
         passwordLabel.setFont(new Font("Sans", Font.BOLD, 20));
 
         JTextField userField = new JTextField(20);
@@ -64,6 +64,7 @@ public class Form extends JFrame {
                     return;
                 }
                 new Menu();
+                Thread.sleep(50);
                 dispose();
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -83,7 +84,7 @@ public class Form extends JFrame {
             }
         });
 
-        JButton forgetPasswordButton = new JButton("Esqueci minha senha");
+        JButton forgetPasswordButton = new JButton(Constants.FORGOT);
         forgetPasswordButton.setFont(new Font("Sans", Font.BOLD, 20));
         forgetPasswordButton.setPreferredSize(new Dimension(300, 40));
         forgetPasswordButton.setBackground(new Color(0x096B06));

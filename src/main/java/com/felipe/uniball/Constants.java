@@ -2,7 +2,6 @@ package com.felipe.uniball;
 
 public class Constants {
     public static final String REGISTER = "Registrar";
-    public static final String SUCCESSFUL_LOGIN = "Login com sucesso!";
     public static final String FAILED_LOGIN = "Login falhou. Tente novamente.";
     public static final String SUCCESSFUL_REGISTER = "Registrado com sucesso!";
     public static final String FAILED_REGISTER = "Registrar falhou. Tente novamente.";
@@ -19,4 +18,7 @@ public class Constants {
     public static final String SECRET_PHRASE = "Pergunta secreta";
     public static final String SECRET_ANSWER = "Sua resposta";
     public static final String SEND = "Enviar";
+    public static final String NEW_GAME = "Nova partida";
+    public static final String PLAYERS = "Jogadores";
+    public static final String ADD_PLAYER = "Adicionar jogador";
 }

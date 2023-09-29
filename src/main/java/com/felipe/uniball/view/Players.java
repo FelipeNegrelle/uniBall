@@ -1,5 +1,6 @@
 package com.felipe.uniball.view;
 
+import com.felipe.uniball.Constants;
 import com.felipe.uniball.controller.Util;
 import com.felipe.uniball.models.Player;
 import net.miginfocom.swing.MigLayout;
@@ -13,7 +14,7 @@ public class Players extends JFrame {
     private static DefaultTableModel model;
 
     public Players() {
-        super("Player Table");
+        super(Constants.PLAYERS);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1920, 1080));
@@ -24,16 +25,12 @@ public class Players extends JFrame {
         panel.setPreferredSize(new Dimension(1080, 920));
         panel.setBackground(new Color(0x096B06));
 
-        JLabel titleLabel = new JLabel("Jogadores");
+        JLabel titleLabel = new JLabel(Constants.PLAYERS);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
         titleLabel.setForeground(Color.WHITE);
         panel.add(titleLabel, "span, center, gapbottom 15");
 
-        model = new DefaultTableModel();
-        model.addColumn("Código");
-        model.addColumn("Nome");
-        model.addColumn("Número");
-        model.addColumn("Posição");
+        model = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
 
         JTable table = new JTable(model);
         table.setFont(new Font("Sans", Font.PLAIN, 20));
@@ -116,6 +113,7 @@ public class Players extends JFrame {
         table.setRowHeight(30);
         table.setDefaultEditor(Object.class, null);
         table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setResizingAllowed(false);
         table.getTableHeader().setFont(new Font("Sans", Font.BOLD, 20));
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -133,7 +131,7 @@ public class Players extends JFrame {
         setVisible(true);
     }
 
-    public static void updatePlayerTable() {
+    private static void updatePlayerTable() {
         model.setRowCount(0);
 
         List<Player> playerList = Util.getPlayers();
