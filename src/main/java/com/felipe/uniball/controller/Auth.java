@@ -13,7 +13,7 @@ public class Auth {
         final String queryRegister = "INSERT INTO players (name, number, position, score, user, password, secret_phrase, secret_answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         final String queryCheck = "SELECT user FROM players WHERE user = ?";
         try {
-            ResultSet rs = Database.execute(queryCheck, new Object[]{ username }, false);
+            ResultSet rs = Database.execute(queryCheck, new Object[]{username}, false);
 
             if (rs.next()) {
                 JDialog dialog = new JDialog();
@@ -88,14 +88,15 @@ public class Auth {
         return false;
     }
 
-    public static boolean forgotPassword(String username, String secretAnswer, String newPassword) {
-        final String query = "UPDATE players SET password = ? WHERE user = ? AND secret_answer = ?";
+    public static boolean forgotPassword(String username, String newPassword) {
+        final String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+        final String query = "UPDATE players SET password = ? WHERE user = ?";
         try {
             Database.getConnection();
             Database.execute(query, new Object[]{
-                    newPassword,
+                    hashedPassword,
                     username,
-                    secretAnswer
             }, true);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

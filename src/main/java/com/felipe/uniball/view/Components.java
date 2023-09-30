@@ -331,7 +331,15 @@ public class Components {
 
             final GenericLabel nameLabel = new GenericLabel("Usuário " + user, Font.BOLD);
 
+            final GenericLabel passwordLabel = new GenericLabel(PASSWORD, Font.BOLD);
             final JPasswordField passwordField = new JPasswordField(30);
+            passwordField.setFont(new Font("Sans", Font.PLAIN, 20));
+            passwordField.setPreferredSize(new Dimension(300, 10));
+
+            final GenericLabel confirmPasswordLabel = new GenericLabel("Confirme sua senha", Font.BOLD);
+            final JPasswordField confirmPasswordField = new JPasswordField(30);
+            confirmPasswordField.setFont(new Font("Sans", Font.PLAIN, 20));
+            confirmPasswordField.setPreferredSize(new Dimension(300, 10));
 
             JButton sendButton = new JButton("Redefinir senha");
             sendButton.setFont(new Font("Sans", Font.BOLD, 20));
@@ -341,12 +349,23 @@ public class Components {
 
             JPanel panel = new JPanel(new MigLayout("fill", "[grow][fill]", "[]10[]"));
             panel.add(nameLabel, "alignx left, wrap");
+            panel.add(passwordLabel, "alignx left, wrap");
             panel.add(passwordField, "alignx left, growx, wrap");
+            panel.add(confirmPasswordLabel, "alignx left, wrap");
+            panel.add(confirmPasswordField, "alignx left, growx, wrap");
             panel.add(sendButton, "span 2, align center");
 
             sendButton.addActionListener(e -> {
-//                    Auth.forgetPassword(nameField.getText());
-                dispose();
+                if (
+                        !Arrays.toString(passwordField.getPassword()).equals(Arrays.toString(confirmPasswordField.getPassword()))
+                        && Objects.nonNull(passwordField.getPassword())
+                        && Objects.nonNull(confirmPasswordField.getPassword())
+                ) {
+                    JOptionPane.showMessageDialog(ResetPasswordDialog.this, "As senhas não coincidem", "Erro", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    Auth.forgotPassword(user, Arrays.toString(confirmPasswordField.getPassword()));
+                    dispose();
+                }
             });
 
             add(panel);
