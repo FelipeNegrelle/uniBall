@@ -15,14 +15,12 @@ public class Players extends JFrame {
 
     public Players() {
         super(Constants.PLAYERS);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(1920, 1080));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow]"));
 
         JPanel panel = new JPanel(new MigLayout("align center, wrap 4", "[grow]", "[][grow][]"));
-        panel.setPreferredSize(new Dimension(1080, 920));
+//        panel.setPreferredSize(new Dimension(1080, 920));
         panel.setBackground(new Color(0x096B06));
 
         JLabel titleLabel = new JLabel(Constants.PLAYERS);
@@ -30,25 +28,25 @@ public class Players extends JFrame {
         titleLabel.setForeground(Color.WHITE);
         panel.add(titleLabel, "span, center, gapbottom 15");
 
-        model = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
+        model = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição", "Usuário"}, 0);
 
         JTable table = new JTable(model);
         table.setFont(new Font("Sans", Font.PLAIN, 20));
         table.setSelectionBackground(new Color(0xE5096B06, true));
         table.setSelectionForeground(Color.WHITE);
 
-        JButton returnButton = new JButton("Voltar");
+        JButton returnButton = new JButton(Constants.BACK);
         returnButton.addActionListener(e -> {
             dispose();
             new Menu();
         });
-        returnButton.setPreferredSize(new Dimension(400, 150));
+//        returnButton.setPreferredSize(new Dimension(400, 150));
         returnButton.setBackground(new Color(0xBE0606));
         returnButton.setForeground(Color.WHITE);
         returnButton.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         JButton newPlayer = new JButton("Novo jogador");
-        newPlayer.setPreferredSize(new Dimension(400, 150));
+//        newPlayer.setPreferredSize(new Dimension(400, 150));
         newPlayer.setBackground(Color.white);
         newPlayer.setForeground(Color.black);
         newPlayer.setFont(new Font("Tahoma", Font.BOLD, 50));
@@ -58,7 +56,7 @@ public class Players extends JFrame {
         });
 
         JButton editPlayer = new JButton("Editar jogador");
-        editPlayer.setPreferredSize(new Dimension(400, 150));
+//        editPlayer.setPreferredSize(new Dimension(400, 150));
         editPlayer.setBackground(Color.white);
         editPlayer.setForeground(Color.black);
         editPlayer.setFont(new Font("Tahoma", Font.BOLD, 50));
@@ -81,7 +79,7 @@ public class Players extends JFrame {
         });
 
         JButton deletePlayer = new JButton("Excluir jogador");
-        deletePlayer.setPreferredSize(new Dimension(400, 150));
+//        deletePlayer.setPreferredSize(new Dimension(400, 150));
         deletePlayer.setBackground(Color.white);
         deletePlayer.setForeground(Color.black);
         deletePlayer.setFont(new Font("Tahoma", Font.BOLD, 50));
@@ -99,15 +97,7 @@ public class Players extends JFrame {
             }
         });
 
-        List<Player> playerList = Util.getPlayers();
-        for (Player player : playerList) {
-            model.addRow(new Object[]{
-                    player.getId(),
-                    player.getName(),
-                    player.getNumber(),
-                    player.getPosition(),
-            });
-        }
+        updatePlayerTable();
 
         table.getSelectionModel().addListSelectionListener(e -> table.repaint());
         table.setRowHeight(30);
@@ -117,8 +107,7 @@ public class Players extends JFrame {
         table.getTableHeader().setFont(new Font("Sans", Font.BOLD, 20));
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(1080, 920));
-
+//        scrollPane.setPreferredSize(new Dimension(1080, 920));
         panel.add(scrollPane, "span, align center, grow");
         panel.add(returnButton, "split 4, align left");
         panel.add(newPlayer, "align right");
@@ -126,7 +115,7 @@ public class Players extends JFrame {
         panel.add(deletePlayer, "align right");
 
         add(panel, "align center, grow");
-        setLocationRelativeTo(null);
+//        setLocationRelativeTo(null);
         pack();
         setVisible(true);
     }
@@ -141,6 +130,7 @@ public class Players extends JFrame {
                     player.getName(),
                     player.getNumber(),
                     player.getPosition(),
+                    player.getUser()
             });
         }
     }

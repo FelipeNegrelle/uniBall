@@ -7,21 +7,24 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.*;
 
 import static com.felipe.uniball.Constants.NEW_GAME;
+import static com.felipe.uniball.Constants.UNIBALL;
 
 public class Menu extends JFrame {
     public Menu() {
         super("Menu Inicial");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBackground(new Color(0x096B06));
 
         JPanel mainPanel = new JPanel(new MigLayout("gapx 50, gapy 50, align center", "[fill]"));
-        JPanel sairPanel = new JPanel(new MigLayout("fill", "[grow]"));
-        JPanel titlePanel = new JPanel(new MigLayout("fill", "[fill]"));
+        mainPanel.setBackground(new Color(0x096B06));
 
-        JLabel titleLabel = new JLabel("UNIBALL");
+        JPanel titlePanel = new JPanel(new MigLayout("fill", "[fill]"));
+        titlePanel.setBackground(new Color(0x096B06));
+
+        JLabel titleLabel = new JLabel(UNIBALL);
         titleLabel.setFont(new Font("Sans", Font.BOLD, 80));
-        titleLabel.setForeground(Color.BLACK);
+        titleLabel.setForeground(Color.WHITE);
         titlePanel.add(titleLabel, "wrap, align center");
 
         JButton jogadores = new JButton("Jogadores");
@@ -39,18 +42,18 @@ public class Menu extends JFrame {
         JButton sair = new JButton("Sair");
 
         jogadores.setPreferredSize(new Dimension(400, 150));
-        jogadores.setBackground(new Color(0x096B06));
-        jogadores.setForeground(Color.WHITE);
+        jogadores.setBackground(Color.white);
+        jogadores.setForeground(Color.black);
         jogadores.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         partida.setPreferredSize(new Dimension(400, 150));
-        partida.setBackground(new Color(0x096B06));
-        partida.setForeground(Color.WHITE);
+        partida.setBackground(Color.white);
+        partida.setForeground(Color.black);
         partida.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         ranking.setPreferredSize(new Dimension(400, 150));
-        ranking.setBackground(new Color(0x096B06));
-        ranking.setForeground(Color.WHITE);
+        ranking.setBackground(Color.white);
+        ranking.setForeground(Color.black);
         ranking.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         sair.setPreferredSize(new Dimension(400, 150));
@@ -63,12 +66,13 @@ public class Menu extends JFrame {
         mainPanel.add(jogadores);
         mainPanel.add(partida);
         mainPanel.add(ranking, "wrap");
-        sairPanel.add(sair);
-        mainPanel.add(sairPanel);
+        mainPanel.add(sair, "wrap");
+//        sairPanel.add(sair);
+//        mainPanel.add(sairPanel);
         add(mainPanel);
 
         pack();
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(this);
         setVisible(true);
     }
 }

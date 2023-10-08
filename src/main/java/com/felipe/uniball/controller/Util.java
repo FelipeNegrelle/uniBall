@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Util {
     public static List<Player> getPlayers() {
-        final String query = "SELECT id_player, name, number, position, score FROM players ORDER BY id_player ASC";
+        final String query = "SELECT id_player, name, number, position, score, user FROM players ORDER BY id_player ASC";
         try {
             Database.getConnection();
             ResultSet rs = Database.execute(query, new Object[]{}, false);
@@ -20,6 +20,7 @@ public class Util {
                 p.setNumber(rs.getInt("number"));
                 p.setPosition(rs.getString("position"));
                 p.setScore(rs.getInt("score"));
+                p.setUser(rs.getString("user"));
                 players.add(p);
             }
             return players;

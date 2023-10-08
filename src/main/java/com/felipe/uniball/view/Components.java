@@ -239,7 +239,7 @@ public class Components {
         JDialog dialog = new JDialog();
         dialog.setAlwaysOnTop(true);
         int result = JOptionPane.showConfirmDialog(dialog, "Ao utilizar o Uniball, você concorda com os termos de uso e a política de privacidade.", "Política de privacidade", JOptionPane.YES_NO_OPTION);
-        return result == JOptionPane.YES_OPTION ? true : false;
+        return result == JOptionPane.YES_OPTION;
     }
 
     public static class GetUserForgetPasswordDialog extends JDialog {
@@ -284,7 +284,7 @@ public class Components {
             setSize(750, 500);
             setLocationRelativeTo(parent);
 
-            final JLabel nameLabel = new JLabel("Usuário " + user);
+            final JLabel nameLabel = new JLabel( USER+ ": " + user);
             nameLabel.setFont(new Font("Sans", Font.BOLD, 20));
 
             final GenericLabel questionLabel = new GenericLabel(SECRET_PHRASE + ": " + Util.getSecretPhrase(user), Font.BOLD);
@@ -369,6 +369,14 @@ public class Components {
             });
 
             add(panel);
+        }
+    }
+
+    public static class newGameDialog extends JDialog {
+        public newGameDialog(JFrame parent) {
+            super(parent, NEW_GAME, true);
+            setSize(750, 500);
+            setLocationRelativeTo(parent);
         }
     }
 }
