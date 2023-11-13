@@ -10,21 +10,22 @@ import com.felipe.uniball.controller.Util;
 import com.felipe.uniball.models.Player;
 
 import java.awt.*;
+import java.util.*;
 import java.util.List;
 
-import static com.felipe.uniball.Constants.PLAYERS;
+import static com.felipe.uniball.Constants.*;
 
 public class NewGame extends JFrame {
     private static final DefaultTableModel leftModel = new DefaultTableModel(new Object[]{"Nome", "Número", "Posição"}, 0);
     JTable leftTable = new JTable(leftModel);
-    List<Player> leftTablePlayers = null;
+    List<Player> leftTablePlayers = new ArrayList<>();
 
     private static final DefaultTableModel middleModel = new DefaultTableModel(new Object[]{"Nome", "Número", "Posição"}, 0);
     JTable middleTable = new JTable(middleModel);
 
     private static final DefaultTableModel rightModel = new DefaultTableModel(new Object[]{"Nome", "Número", "Posição"}, 0);
     JTable rightTable = new JTable(rightModel);
-    List<Player> rightTablePlayers = null;
+    List<Player> rightTablePlayers = new ArrayList<>();
 
     public NewGame() {
         super(Constants.NEW_GAME);
@@ -33,7 +34,7 @@ public class NewGame extends JFrame {
         setLayout(new MigLayout("fill, insets 0, align center", "[fill]", "[fill]"));
 
         JPanel mainPanel = new JPanel(new MigLayout("align center, wrap 3", "[grow]", "[grow]"));
-        mainPanel.setBackground(new Color(0x096B06));
+        mainPanel.setBackground(GREEN);
 
         JLabel titleLabel = new JLabel(Constants.NEW_GAME, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Sans", Font.BOLD, 40));
@@ -50,6 +51,9 @@ public class NewGame extends JFrame {
         leftTable.getTableHeader().setReorderingAllowed(false);
         leftTable.getTableHeader().setResizingAllowed(false);
         leftTable.getTableHeader().setFont(new Font("Sans", Font.BOLD, 15));
+        leftTable.setFont(new Font("Sans", Font.PLAIN, 20));
+        leftTable.setSelectionBackground(GREEN);
+        leftTable.setSelectionForeground(Color.WHITE);
 
         JScrollPane leftScrollPane = new JScrollPane(leftTable);
         leftScrollPane.setMinimumSize(new Dimension(100, 100));
@@ -76,8 +80,8 @@ public class NewGame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Selecione um jogador para adicionar ao time A", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
             }
         });
-        leftAddButton.setBackground(Color.white);
-        leftAddButton.setForeground(Color.BLACK);
+        leftAddButton.setBackground(GREEN);
+        leftAddButton.setForeground(Color.WHITE);
         leftAddButton.setFont(new Font("Tahoma", Font.BOLD, 20));
 
         JButton leftRemoveButton = new JButton("Remover Jogador");
@@ -92,12 +96,14 @@ public class NewGame extends JFrame {
                 middleModel.addRow(new Object[]{name, number, position});
 
                 leftModel.removeRow(selectedRow);
+
+                leftTablePlayers.remove(selectedRow);
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione um jogador para remover do time A", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
             }
         });
-        leftRemoveButton.setBackground(Color.white);
-        leftRemoveButton.setForeground(Color.BLACK);
+        leftRemoveButton.setBackground(RED);
+        leftRemoveButton.setForeground(Color.WHITE);
         leftRemoveButton.setFont(new Font("Tahoma", Font.BOLD, 20));
 
         leftPanel.setBorder(BorderFactory.createTitledBorder("Time A"));
@@ -114,6 +120,9 @@ public class NewGame extends JFrame {
         middleTable.getTableHeader().setReorderingAllowed(false);
         middleTable.getTableHeader().setResizingAllowed(false);
         middleTable.getTableHeader().setFont(new Font("Sans", Font.BOLD, 15));
+        middleTable.setFont(new Font("Sans", Font.PLAIN, 20));
+        middleTable.setSelectionBackground(GREEN);
+        middleTable.setSelectionForeground(Color.WHITE);
 
         JScrollPane middleScrollPane = new JScrollPane(middleTable);
         middleScrollPane.setMinimumSize(new Dimension(100, 100));
@@ -130,6 +139,9 @@ public class NewGame extends JFrame {
         rightTable.getTableHeader().setReorderingAllowed(false);
         rightTable.getTableHeader().setResizingAllowed(false);
         rightTable.getTableHeader().setFont(new Font("Sans", Font.BOLD, 15));
+        rightTable.setFont(new Font("Sans", Font.PLAIN, 20));
+        rightTable.setSelectionBackground(GREEN);
+        rightTable.setSelectionForeground(Color.WHITE);
 
         JScrollPane rightScrollPane = new JScrollPane(rightTable);
         rightScrollPane.setMinimumSize(new Dimension(100, 100));
@@ -150,6 +162,7 @@ public class NewGame extends JFrame {
                 p.setName(name);
                 p.setNumber(number);
                 p.setPosition(position);
+
                 rightTablePlayers.add(p);
 
                 middleModel.removeRow(selectedRow);
@@ -157,8 +170,8 @@ public class NewGame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Selecione um jogador para adicionar ao time B", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
             }
         });
-        rightAddButton.setBackground(Color.white);
-        rightAddButton.setForeground(Color.BLACK);
+        rightAddButton.setBackground(GREEN);
+        rightAddButton.setForeground(Color.WHITE);
         rightAddButton.setFont(new Font("Tahoma", Font.BOLD, 20));
 
         JButton rightRemoveButton = new JButton("Remover Jogador");
@@ -173,12 +186,14 @@ public class NewGame extends JFrame {
                 middleModel.addRow(new Object[]{name, number, position});
 
                 rightModel.removeRow(selectedRow);
+
+                rightTablePlayers.remove(selectedRow);
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione um jogador para remover do time B", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
             }
         });
-        rightRemoveButton.setBackground(Color.white);
-        rightRemoveButton.setForeground(Color.BLACK);
+        rightRemoveButton.setBackground(RED);
+        rightRemoveButton.setForeground(Color.WHITE);
         rightRemoveButton.setFont(new Font("Tahoma", Font.BOLD, 20));
 
         rightPanel.setBorder(BorderFactory.createTitledBorder("Time B"));
@@ -197,13 +212,23 @@ public class NewGame extends JFrame {
             dispose();
             new Menu();
         });
-        returnButton.setBackground(new Color(0xBE0606));
+        returnButton.setBackground(RED);
         returnButton.setForeground(Color.WHITE);
         returnButton.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         JButton startButton = new JButton(Constants.NEW_GAME);
         startButton.addActionListener(e -> {
-            new Components.newGameDialog(this).setVisible(true);
+            if ((leftTablePlayers.size() >= 7 && leftTablePlayers.size() <= 10) && (rightTablePlayers.size() >= 7 && rightTablePlayers.size() <= 10)) {
+                if (hasAllPositions(leftTablePlayers) && hasAllPositions(rightTablePlayers)) {
+                    setPlayersTeams(leftTablePlayers, 'A');
+                    setPlayersTeams(rightTablePlayers, 'B');
+                    new Components.NewGameDialog(this, leftTablePlayers, rightTablePlayers).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cada time deve ter pelo menos um jogador de cada posição", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Cada time deve ter entre 7 e 10 jogadores", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
+            }
         });
         startButton.setBackground(Color.white);
         startButton.setForeground(Color.BLACK);
@@ -218,7 +243,7 @@ public class NewGame extends JFrame {
         mainPanel.add(returnButton, "split 2, align left");
         mainPanel.add(startButton, "align right");
 
-        updatePlayers(middleModel, Util.getPlayers());
+        updatePlayerTable();
 
         add(mainPanel);
         setLocationRelativeTo(this);
@@ -226,11 +251,31 @@ public class NewGame extends JFrame {
         setVisible(true);
     }
 
-    private static void updatePlayers(DefaultTableModel model, List<Player> playerList) {
-        model.setRowCount(0);
+    public boolean hasAllPositions(List<Player> players) {
+        Set<String> positions = new HashSet<>();
+        for (Player player : players) {
+            positions.add(player.getPosition());
+        }
+        String[] requiredPositions = {"Goleiro", "Atacante", "Meio-campo", "Zagueiro", "Lateral"};
+        return positions.containsAll(Arrays.asList(requiredPositions));
+    }
 
+    private static void setPlayersTeams(List<Player> players, char team) {
+        for (Player player : players) {
+            player.setTeam(team);
+        }
+    }
+
+    private static void updatePlayerTable(){
+        middleModel.setRowCount(0);
+
+        List<Player> playerList = Util.getPlayers("id_player", "ASC");
         for (Player player : playerList) {
-            model.addRow(new Object[]{player.getName(), player.getNumber(), player.getPosition()});
+            middleModel.addRow(new Object[]{
+                    player.getName(),
+                    player.getNumber(),
+                    player.getPosition(),
+            });
         }
     }
 }

@@ -1,9 +1,13 @@
 package com.felipe.uniball.view;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 
 import com.felipe.uniball.Constants;
 import com.felipe.uniball.controller.Auth;
@@ -90,7 +94,7 @@ public class Components {
             JButton registerButton = new JButton(REGISTER);
             registerButton.setFont(new Font("Sans", Font.BOLD, 20));
             registerButton.setPreferredSize(new Dimension(300, 40));
-            registerButton.setBackground(new Color(0x096B06));
+            registerButton.setBackground(GREEN);
             registerButton.setForeground(Color.white);
             panel.add(registerButton, "span 2, align center");
 
@@ -169,7 +173,7 @@ public class Components {
             JButton editButton = new JButton(EDIT);
             editButton.setFont(new Font("Sans", Font.BOLD, 20));
             editButton.setPreferredSize(new Dimension(300, 40));
-            editButton.setBackground(new Color(0x096B06));
+            editButton.setBackground(GREEN);
             editButton.setForeground(Color.WHITE);
 
             JPanel panel = new JPanel(new MigLayout("filly", "[align right][grow]", "[]10[]10[]10[]10[]10[]10[]"));
@@ -218,7 +222,7 @@ public class Components {
             JButton deleteButton = new JButton(DELETE);
             deleteButton.setFont(new Font("Sans", Font.BOLD, 20));
             deleteButton.setPreferredSize(new Dimension(300, 40));
-            deleteButton.setBackground(new Color(0xBE0606));
+            deleteButton.setBackground(RED);
             deleteButton.setForeground(Color.white);
 
             JPanel panel = new JPanel(new MigLayout("fill", "[grow][fill]", "[]10[]"));
@@ -257,7 +261,7 @@ public class Components {
             JButton sendButton = new JButton(SEND);
             sendButton.setFont(new Font("Sans", Font.BOLD, 20));
             sendButton.setPreferredSize(new Dimension(300, 40));
-            sendButton.setBackground(new Color(0x096B06));
+            sendButton.setBackground(GREEN);
             sendButton.setForeground(Color.white);
 
             JPanel panel = new JPanel(new MigLayout("fill", "[grow][fill]", "[]10[]"));
@@ -284,7 +288,7 @@ public class Components {
             setSize(750, 500);
             setLocationRelativeTo(parent);
 
-            final JLabel nameLabel = new JLabel( USER+ ": " + user);
+            final JLabel nameLabel = new JLabel(USER + ": " + user);
             nameLabel.setFont(new Font("Sans", Font.BOLD, 20));
 
             final GenericLabel questionLabel = new GenericLabel(SECRET_PHRASE + ": " + Util.getSecretPhrase(user), Font.BOLD);
@@ -297,7 +301,7 @@ public class Components {
             JButton sendButton = new JButton(SEND);
             sendButton.setFont(new Font("Sans", Font.BOLD, 20));
             sendButton.setPreferredSize(new Dimension(300, 40));
-            sendButton.setBackground(new Color(0x096B06));
+            sendButton.setBackground(GREEN);
             sendButton.setForeground(Color.white);
 
             JPanel panel = new JPanel(new MigLayout("fill", "[grow][fill]", "[]10[]"));
@@ -308,7 +312,6 @@ public class Components {
             panel.add(sendButton, "span 2, align center");
 
             sendButton.addActionListener(e -> {
-//                    Auth.forgetPassword(nameField.getText());
                 if (Auth.checkSecretAnswer(user, answerField.getText().replaceAll(" ", "").toLowerCase())) {
                     dispose();
                     new ResetPasswordDialog(parent, user).setVisible(true);
@@ -344,7 +347,7 @@ public class Components {
             JButton sendButton = new JButton("Redefinir senha");
             sendButton.setFont(new Font("Sans", Font.BOLD, 20));
             sendButton.setPreferredSize(new Dimension(300, 40));
-            sendButton.setBackground(new Color(0x096B06));
+            sendButton.setBackground(GREEN);
             sendButton.setForeground(Color.white);
 
             JPanel panel = new JPanel(new MigLayout("fill", "[grow][fill]", "[]10[]"));
@@ -358,8 +361,8 @@ public class Components {
             sendButton.addActionListener(e -> {
                 if (
                         !Arrays.toString(passwordField.getPassword()).equals(Arrays.toString(confirmPasswordField.getPassword()))
-                        && Objects.nonNull(passwordField.getPassword())
-                        && Objects.nonNull(confirmPasswordField.getPassword())
+                                && Objects.nonNull(passwordField.getPassword())
+                                && Objects.nonNull(confirmPasswordField.getPassword())
                 ) {
                     JOptionPane.showMessageDialog(ResetPasswordDialog.this, "As senhas não coincidem", "Erro", JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -372,11 +375,231 @@ public class Components {
         }
     }
 
-    public static class newGameDialog extends JDialog {
-        public newGameDialog(JFrame parent) {
+    public static class NewGameDialog extends JDialog {
+        public NewGameDialog(JFrame parent, List<Player> teamAPlayers, List<Player> teamBPlayers) {
             super(parent, NEW_GAME, true);
-            setSize(750, 500);
+            setSize(1080, 920);
             setLocationRelativeTo(parent);
+            setLayout(new MigLayout("fill, insets 20", "[grow][grow]", ""));
+
+            Font font = new Font("Sans", Font.PLAIN, 20);
+
+            final List<Player> players = new ArrayList<>();
+            players.addAll(teamAPlayers);
+            players.addAll(teamBPlayers);
+
+            JPanel leftPanel = new JPanel(new MigLayout("insets 0, fill", "[grow]", "[grow]"));
+
+            DefaultTableModel playersTableModel = new DefaultTableModel(new Object[]{"Nome", "Pontuação", "Time"}, 0);
+
+            JTable playersTable = new JTable(playersTableModel);
+            playersTable.getSelectionModel().addListSelectionListener(e -> playersTable.repaint());
+            playersTable.setRowHeight(30);
+            playersTable.setDefaultEditor(Object.class, null);
+            playersTable.getTableHeader().setReorderingAllowed(false);
+            playersTable.getTableHeader().setResizingAllowed(false);
+            playersTable.getTableHeader().setFont(font);
+            playersTable.setFont(font);
+
+            JScrollPane tableScrollPane = new JScrollPane(playersTable);
+            tableScrollPane.setPreferredSize(new Dimension(700, 600));
+
+            Util.updatePlayers(playersTableModel, players);
+
+            leftPanel.add(tableScrollPane, "grow");
+
+            add(leftPanel, "grow");
+
+            JPanel rightPanel = new JPanel(new MigLayout("insets 10, fill", "[grow]", "[][]"));
+
+            JPanel scorePanel = new JPanel(new MigLayout("fill", "[grow]10[][grow]", "[grow]"));
+
+            JTextField scoreField = new JTextField("0", 5);
+            scoreField.setFont(font);
+            scoreField.setHorizontalAlignment(JTextField.CENTER);
+            scoreField.setEditable(false);
+
+            JButton decreaseButton = new JButton("-");
+            decreaseButton.setFont(font);
+            decreaseButton.addActionListener(e -> {
+                int currentScore = Integer.parseInt(scoreField.getText());
+                if (currentScore > 0) {
+                    scoreField.setText(String.valueOf(currentScore - 1));
+                }
+            });
+            decreaseButton.setBackground(RED);
+            decreaseButton.setForeground(Color.WHITE);
+            decreaseButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+
+            JButton increaseButton = new JButton("+");
+            increaseButton.addActionListener(e -> {
+                int currentScore = Integer.parseInt(scoreField.getText());
+                scoreField.setText(String.valueOf(currentScore + 1));
+            });
+            increaseButton.setBackground(GREEN);
+            increaseButton.setForeground(Color.WHITE);
+            increaseButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+
+            JButton saveButton = new JButton("Salvar");
+            saveButton.addActionListener(e -> {
+                final int selectedRow = playersTable.getSelectedRow();
+
+                if (selectedRow != -1) {
+                    Player player = players.get(selectedRow);
+                    player.setScore(Integer.parseInt(scoreField.getText()));
+
+                    playersTableModel.setValueAt(player.getName(), selectedRow, 0);
+                    playersTableModel.setValueAt(player.getScore(), selectedRow, 1);
+                    playersTableModel.setValueAt(player.getTeam(), selectedRow, 2);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Selecione um jogador para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                }
+            });
+
+
+            saveButton.setBackground(Color.WHITE);
+            saveButton.setForeground(Color.BLACK);
+            saveButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+
+            JLabel scoreLabel = new JLabel("Gols");
+            scoreLabel.setFont(font);
+
+            scorePanel.add(scoreLabel);
+
+            scorePanel.add(decreaseButton, "growy");
+
+            scorePanel.add(scoreField, "grow");
+
+            scorePanel.add(increaseButton, "growy");
+
+            scorePanel.add(saveButton, "span, grow");
+
+            rightPanel.add(scorePanel, "span 2, align center, wrap, gapy 10");
+
+            JPanel resultPanel = new JPanel(new MigLayout("fill", "[grow]5[][grow]", "[]"));
+
+            JLabel teamALabel = new JLabel("Time A");
+            teamALabel.setFont(font);
+            teamALabel.setHorizontalAlignment(JLabel.CENTER);
+
+            JTextField teamAScoreField = new JTextField("0", 5);
+            teamAScoreField.setFont(font);
+            teamAScoreField.setHorizontalAlignment(JTextField.CENTER);
+
+            JLabel xLabel = new JLabel("X");
+            xLabel.setFont(font);
+            xLabel.setHorizontalAlignment(JLabel.CENTER);
+
+            JTextField teamBScoreField = new JTextField("0", 5);
+            teamBScoreField.setFont(font);
+            teamBScoreField.setHorizontalAlignment(JTextField.CENTER);
+
+            JLabel teamBLabel = new JLabel("Time B");
+            teamBLabel.setFont(font);
+            teamBLabel.setHorizontalAlignment(JLabel.CENTER);
+
+            resultPanel.add(teamALabel, "split 3");
+
+            resultPanel.add(teamAScoreField);
+
+            resultPanel.add(xLabel);
+
+            resultPanel.add(teamBScoreField);
+
+            resultPanel.add(teamBLabel, "wrap");
+
+            rightPanel.add(resultPanel, "span 2, wrap");
+
+            JComboBox<String> bestPlayerComboBox = new JComboBox<>(Util.getPlayersName(players));
+            bestPlayerComboBox.setFont(font);
+            bestPlayerComboBox.setSelectedIndex(-1);
+            bestPlayerComboBox.setPreferredSize(new Dimension(300, 10));
+            bestPlayerComboBox.setFont(new Font("Sans", Font.PLAIN, 20));
+
+            JLabel bestPlayerLabel = new JLabel("Melhor jogador:");
+            bestPlayerLabel.setFont(font);
+
+            rightPanel.add(bestPlayerLabel);
+
+            rightPanel.add(bestPlayerComboBox, "span 2, wrap");
+
+            JComboBox<String> bestScoreComboBox = new JComboBox<>(Util.getPlayersName(players));
+            bestScoreComboBox.setFont(font);
+            bestScoreComboBox.setSelectedIndex(-1);
+            bestScoreComboBox.setPreferredSize(new Dimension(300, 10));
+            bestScoreComboBox.setFont(new Font("Sans", Font.PLAIN, 20));
+
+            JLabel bestScoreLabel = new JLabel("Melhor gol:");
+            bestScoreLabel.setFont(font);
+
+            rightPanel.add(bestScoreLabel);
+
+            rightPanel.add(bestScoreComboBox, "span 2, wrap");
+
+            JPanel dateTimePanel = new JPanel(new MigLayout("fill", "[grow]", "[]"));
+
+            JLabel dateTimeLabel = new JLabel("Data/Hora:");
+            dateTimeLabel.setFont(font);
+
+            JTextField dateTimeField = new JTextField();
+            dateTimeField.setFont(font);
+            dateTimeField.setEditable(false);
+            dateTimeField.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date()));
+            dateTimeField.setPreferredSize(new Dimension(220, 10));
+
+            dateTimePanel.add(dateTimeLabel);
+
+            dateTimePanel.add(dateTimeField);
+
+            rightPanel.add(dateTimePanel, "span 2, wrap, align left");
+
+            JButton newMatchButton = new JButton(NEW_GAME);
+            newMatchButton.addActionListener(e -> {
+                try {
+                    Integer.parseInt(teamAScoreField.getText());
+
+                    Integer.parseInt(teamBScoreField.getText());
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(this, "Insira um número válido para o resultado da partida.", "Aviso", JOptionPane.WARNING_MESSAGE);
+
+                    return;
+                }
+
+                if (Objects.nonNull(bestPlayerComboBox.getSelectedItem()) && Objects.nonNull(bestScoreComboBox.getSelectedItem())) {
+                    for (Player player : players) {
+                        if (player.getName().equals(bestScoreComboBox.getSelectedItem())) {
+                            player.setBeautifulScore();
+                        }
+
+                        if (player.getName().equals(bestPlayerComboBox.getSelectedItem())) {
+                            player.setBestPlayer();
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Selecione o melhor jogador e o melhor gol.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                }
+
+                int idMatch = Util.saveMatch(dateTimeField.getText(), teamAScoreField.getText(), teamBScoreField.getText());
+
+                if (idMatch != -1) {
+                    for (Player player : players) {
+                        Util.relateMatchPlayer(idMatch, player.getId());
+                    }
+
+                    JOptionPane.showMessageDialog(this, "Partida salva com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar partida.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+            newMatchButton.setBackground(GREEN);
+            newMatchButton.setForeground(Color.WHITE);
+            newMatchButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+
+            rightPanel.add(newMatchButton, "span, align center");
+
+            add(rightPanel, "grow");
         }
     }
 }

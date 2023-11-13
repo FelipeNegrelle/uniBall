@@ -8,13 +8,15 @@ import com.felipe.uniball.Constants;
 import com.felipe.uniball.controller.Auth;
 import net.miginfocom.swing.MigLayout;
 
+import static com.felipe.uniball.Constants.GREEN;
+
 public class Form extends JFrame {
     public Form() {
         super(Constants.LOGIN);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new MigLayout("fill, insets 10", "[grow]", "[grow]"));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        getContentPane().setBackground(new Color(0x096B06));
+        getContentPane().setBackground(GREEN);
 
         JPanel mainPanel = new JPanel(new MigLayout("fill, insets 20", "[grow]", "[align center]"));
         mainPanel.setBackground(Color.WHITE);
@@ -54,7 +56,7 @@ public class Form extends JFrame {
         JButton loginButton = new JButton(Constants.LOGIN);
         loginButton.setFont(new Font("Sans", Font.BOLD, 20));
         loginButton.setPreferredSize(new Dimension(300, 40));
-        loginButton.setBackground(new Color(0x096B06));
+        loginButton.setBackground(GREEN);
         loginButton.setForeground(Color.lightGray);
         loginButton.addActionListener(e -> {
             try {
@@ -74,7 +76,7 @@ public class Form extends JFrame {
         JButton registerButton = new JButton(Constants.REGISTER);
         registerButton.setFont(new Font("Sans", Font.BOLD, 20));
         registerButton.setPreferredSize(new Dimension(300, 40));
-        registerButton.setBackground(new Color(0x096B06));
+        registerButton.setBackground(GREEN);
         registerButton.setForeground(Color.lightGray);
         registerButton.addActionListener(e -> {
             try {
@@ -87,7 +89,7 @@ public class Form extends JFrame {
         JButton forgetPasswordButton = new JButton(Constants.FORGOT);
         forgetPasswordButton.setFont(new Font("Sans", Font.BOLD, 20));
         forgetPasswordButton.setPreferredSize(new Dimension(300, 40));
-        forgetPasswordButton.setBackground(new Color(0x096B06));
+        forgetPasswordButton.setBackground(GREEN);
         forgetPasswordButton.setForeground(Color.lightGray);
         forgetPasswordButton.addActionListener(e -> {
             try {

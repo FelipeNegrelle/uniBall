@@ -10,6 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+import static com.felipe.uniball.Constants.GREEN;
+import static com.felipe.uniball.Constants.RED;
+
 public class Players extends JFrame {
     private static DefaultTableModel model;
 
@@ -20,8 +23,7 @@ public class Players extends JFrame {
         setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow]"));
 
         JPanel panel = new JPanel(new MigLayout("align center, wrap 4", "[grow]", "[][grow][]"));
-//        panel.setPreferredSize(new Dimension(1080, 920));
-        panel.setBackground(new Color(0x096B06));
+        panel.setBackground(GREEN);
 
         JLabel titleLabel = new JLabel(Constants.PLAYERS);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
@@ -32,7 +34,7 @@ public class Players extends JFrame {
 
         JTable table = new JTable(model);
         table.setFont(new Font("Sans", Font.PLAIN, 20));
-        table.setSelectionBackground(new Color(0xE5096B06, true));
+        table.setSelectionBackground(GREEN);
         table.setSelectionForeground(Color.WHITE);
 
         JButton returnButton = new JButton(Constants.BACK);
@@ -40,13 +42,11 @@ public class Players extends JFrame {
             dispose();
             new Menu();
         });
-//        returnButton.setPreferredSize(new Dimension(400, 150));
-        returnButton.setBackground(new Color(0xBE0606));
+        returnButton.setBackground(RED);
         returnButton.setForeground(Color.WHITE);
         returnButton.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         JButton newPlayer = new JButton("Novo jogador");
-//        newPlayer.setPreferredSize(new Dimension(400, 150));
         newPlayer.setBackground(Color.white);
         newPlayer.setForeground(Color.black);
         newPlayer.setFont(new Font("Tahoma", Font.BOLD, 50));
@@ -56,7 +56,6 @@ public class Players extends JFrame {
         });
 
         JButton editPlayer = new JButton("Editar jogador");
-//        editPlayer.setPreferredSize(new Dimension(400, 150));
         editPlayer.setBackground(Color.white);
         editPlayer.setForeground(Color.black);
         editPlayer.setFont(new Font("Tahoma", Font.BOLD, 50));
@@ -79,7 +78,6 @@ public class Players extends JFrame {
         });
 
         JButton deletePlayer = new JButton("Excluir jogador");
-//        deletePlayer.setPreferredSize(new Dimension(400, 150));
         deletePlayer.setBackground(Color.white);
         deletePlayer.setForeground(Color.black);
         deletePlayer.setFont(new Font("Tahoma", Font.BOLD, 50));
@@ -107,7 +105,6 @@ public class Players extends JFrame {
         table.getTableHeader().setFont(new Font("Sans", Font.BOLD, 20));
 
         JScrollPane scrollPane = new JScrollPane(table);
-//        scrollPane.setPreferredSize(new Dimension(1080, 920));
         panel.add(scrollPane, "span, align center, grow");
         panel.add(returnButton, "split 4, align left");
         panel.add(newPlayer, "align right");
@@ -115,15 +112,14 @@ public class Players extends JFrame {
         panel.add(deletePlayer, "align right");
 
         add(panel, "align center, grow");
-//        setLocationRelativeTo(null);
         pack();
         setVisible(true);
     }
 
-    private static void updatePlayerTable() {
+    private static void updatePlayerTable(){
         model.setRowCount(0);
 
-        List<Player> playerList = Util.getPlayers();
+        List<Player> playerList = Util.getPlayers("id_player", "ASC");
         for (Player player : playerList) {
             model.addRow(new Object[]{
                     player.getId(),

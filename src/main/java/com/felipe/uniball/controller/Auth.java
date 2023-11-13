@@ -10,7 +10,7 @@ public class Auth {
     public static boolean register(String name, String number, String position, String username, String password, String secretPhrase, String secretAnswer) {
         final String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        final String queryRegister = "INSERT INTO players (name, number, position, score, user, password, secret_phrase, secret_answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        final String queryRegister = "INSERT INTO players (name, number, position, user, password, secret_phrase, secret_answer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         final String queryCheck = "SELECT user FROM players WHERE user = ?";
         try {
             ResultSet rs = Database.execute(queryCheck, new Object[]{username}, false);
@@ -27,7 +27,6 @@ public class Auth {
                     name,
                     number,
                     position,
-                    0,
                     username,
                     hashedPassword,
                     secretPhrase,

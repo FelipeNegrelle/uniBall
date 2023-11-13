@@ -20,14 +20,14 @@ public class Database {
         return connection;
     }
 
-    public static ResultSet execute(String query, Object[] values, boolean isRegister) {
+    public static ResultSet execute(String query, Object[] values, boolean notHasResultSet) {
         Connection connection = getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             for (int i = 0; i < values.length; i++) {
                 statement.setObject(i + 1, values[i]);
             }
-            if (isRegister) {
+            if (notHasResultSet) {
                 statement.executeUpdate();
                 return null;
             } else {

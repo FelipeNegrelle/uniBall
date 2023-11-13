@@ -6,21 +6,21 @@ import net.miginfocom.swing.MigLayout;
 
 import java.awt.*;
 
-import static com.felipe.uniball.Constants.NEW_GAME;
-import static com.felipe.uniball.Constants.UNIBALL;
+import static com.felipe.uniball.Constants.*;
+import static com.felipe.uniball.Constants.GREEN;
 
 public class Menu extends JFrame {
     public Menu() {
         super("Menu Inicial");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setBackground(new Color(0x096B06));
+        setBackground(GREEN);
 
         JPanel mainPanel = new JPanel(new MigLayout("gapx 50, gapy 50, align center", "[fill]"));
-        mainPanel.setBackground(new Color(0x096B06));
+        mainPanel.setBackground(GREEN);
 
         JPanel titlePanel = new JPanel(new MigLayout("fill", "[fill]"));
-        titlePanel.setBackground(new Color(0x096B06));
+        titlePanel.setBackground(GREEN);
 
         JLabel titleLabel = new JLabel(UNIBALL);
         titleLabel.setFont(new Font("Sans", Font.BOLD, 80));
@@ -38,8 +38,15 @@ public class Menu extends JFrame {
             dispose();
             new NewGame();
         });
+
         JButton ranking = new JButton("Ranking");
+        ranking.addActionListener(e -> {
+            dispose();
+            new Ranking();
+        });
+
         JButton sair = new JButton("Sair");
+        sair.addActionListener(e -> System.exit(0));
 
         jogadores.setPreferredSize(new Dimension(400, 150));
         jogadores.setBackground(Color.white);
@@ -57,18 +64,15 @@ public class Menu extends JFrame {
         ranking.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         sair.setPreferredSize(new Dimension(400, 150));
-        sair.setBackground(new Color(0xBE0606));
+        sair.setBackground(RED);
         sair.setForeground(Color.WHITE);
         sair.setFont(new Font("Tahoma", Font.BOLD, 50));
-        sair.addActionListener(e -> System.exit(0));
 
         mainPanel.add(titlePanel, "wrap, align center");
         mainPanel.add(jogadores);
         mainPanel.add(partida);
         mainPanel.add(ranking, "wrap");
         mainPanel.add(sair, "wrap");
-//        sairPanel.add(sair);
-//        mainPanel.add(sairPanel);
         add(mainPanel);
 
         pack();

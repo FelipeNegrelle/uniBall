@@ -6,7 +6,10 @@ public class Player {
     private String position;
     private int number;
     private int score;
+    private int bestPlayer;
+    private int bestScore;
     private String user;
+    private char team;
 
     public int getId() {
         return id;
@@ -48,11 +51,43 @@ public class Player {
         this.score = score;
     }
 
+    public int getBestPlayer() {
+        return bestPlayer;
+    }
+
+    public void setBestPlayer() {
+        this.bestPlayer = getBestPlayer() + 1;
+    }
+
+    public void setBestPlayerFromDb(int bestPlayer) {
+        this.bestPlayer = bestPlayer;
+    }
+
+    public int getBeautifulScore() {
+        return bestScore;
+    }
+
+    public void setBeautifulScore() {
+        this.bestScore = getBeautifulScore() + 1;
+    }
+
+    public void setBeautifulScoreFromDb(int bestScore) {
+        this.bestScore = bestScore;
+    }
+
     public String getUser() {
         return user;
     }
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public char getTeam() {
+        return team;
+    }
+
+    public void setTeam(char team) {
+        this.team = team;
     }
 }
