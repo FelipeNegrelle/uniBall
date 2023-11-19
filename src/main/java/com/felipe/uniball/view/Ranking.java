@@ -77,7 +77,7 @@ public class Ranking extends JFrame {
         panel.add(filterComboBox, "align right, grow");
         panel.add(filterButton, "align right");
 
-        updateRankingTable("id_player");
+        updateRankingTable("score");
 
         add(panel, "align center, grow");
         pack();

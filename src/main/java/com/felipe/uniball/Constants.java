@@ -25,6 +25,7 @@ public static final String UNIBALL = "UNIBALL";
     public static final String PLAYERS = "Jogadores";
     public static final String ADD_PLAYER = "Adicionar jogador";
     public static final String BACK = "Voltar";
+    public static final String MATCHES_HISTORY = "Histórico de partidas";
     public static final Color GREEN = new Color(0x096B06);
     public static final Color RED = new Color(0xBE0606);
 }

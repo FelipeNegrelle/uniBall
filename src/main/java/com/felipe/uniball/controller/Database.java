@@ -34,7 +34,8 @@ public class Database {
                 return statement.executeQuery();
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e);
+            e.printStackTrace();
+//            System.out.println("Database error: " + e.getMessage());
         }
         return null;
     }

@@ -27,14 +27,14 @@ public class Menu extends JFrame {
         titleLabel.setForeground(Color.WHITE);
         titlePanel.add(titleLabel, "wrap, align center");
 
-        JButton jogadores = new JButton("Jogadores");
-        jogadores.addActionListener(e -> {
+        JButton players = new JButton("Jogadores");
+        players.addActionListener(e -> {
             dispose();
             new Players();
         });
 
-        JButton partida = new JButton(NEW_GAME);
-        partida.addActionListener(e -> {
+        JButton match = new JButton(NEW_GAME);
+        match.addActionListener(e -> {
             dispose();
             new NewGame();
         });
@@ -45,23 +45,34 @@ public class Menu extends JFrame {
             new Ranking();
         });
 
+        JButton matchesHistory = new JButton("Histórico de partidas");
+        matchesHistory.addActionListener(e -> {
+            dispose();
+            new MatchesHistory();
+        });
+
         JButton sair = new JButton("Sair");
         sair.addActionListener(e -> System.exit(0));
 
-        jogadores.setPreferredSize(new Dimension(400, 150));
-        jogadores.setBackground(Color.white);
-        jogadores.setForeground(Color.black);
-        jogadores.setFont(new Font("Tahoma", Font.BOLD, 50));
+        players.setPreferredSize(new Dimension(400, 150));
+        players.setBackground(Color.white);
+        players.setForeground(Color.black);
+        players.setFont(new Font("Tahoma", Font.BOLD, 50));
 
-        partida.setPreferredSize(new Dimension(400, 150));
-        partida.setBackground(Color.white);
-        partida.setForeground(Color.black);
-        partida.setFont(new Font("Tahoma", Font.BOLD, 50));
+        match.setPreferredSize(new Dimension(400, 150));
+        match.setBackground(Color.white);
+        match.setForeground(Color.black);
+        match.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         ranking.setPreferredSize(new Dimension(400, 150));
         ranking.setBackground(Color.white);
         ranking.setForeground(Color.black);
         ranking.setFont(new Font("Tahoma", Font.BOLD, 50));
+
+        matchesHistory.setPreferredSize(new Dimension(400, 150));
+        matchesHistory.setBackground(Color.white);
+        matchesHistory.setForeground(Color.black);
+        matchesHistory.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         sair.setPreferredSize(new Dimension(400, 150));
         sair.setBackground(RED);
@@ -69,9 +80,10 @@ public class Menu extends JFrame {
         sair.setFont(new Font("Tahoma", Font.BOLD, 50));
 
         mainPanel.add(titlePanel, "wrap, align center");
-        mainPanel.add(jogadores);
-        mainPanel.add(partida);
+        mainPanel.add(players);
+        mainPanel.add(match);
         mainPanel.add(ranking, "wrap");
+        mainPanel.add(matchesHistory);
         mainPanel.add(sair, "wrap");
         add(mainPanel);
 

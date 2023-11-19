@@ -5,6 +5,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -399,6 +401,8 @@ public class Components {
             playersTable.getTableHeader().setReorderingAllowed(false);
             playersTable.getTableHeader().setResizingAllowed(false);
             playersTable.getTableHeader().setFont(font);
+            playersTable.setSelectionBackground(GREEN);
+            playersTable.setSelectionForeground(Color.WHITE);
             playersTable.setFont(font);
 
             JScrollPane tableScrollPane = new JScrollPane(playersTable);
@@ -456,7 +460,6 @@ public class Components {
                 }
             });
 
-
             saveButton.setBackground(Color.WHITE);
             saveButton.setForeground(Color.BLACK);
             saveButton.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -510,31 +513,31 @@ public class Components {
 
             rightPanel.add(resultPanel, "span 2, wrap");
 
-            JComboBox<String> bestPlayerComboBox = new JComboBox<>(Util.getPlayersName(players));
-            bestPlayerComboBox.setFont(font);
-            bestPlayerComboBox.setSelectedIndex(-1);
-            bestPlayerComboBox.setPreferredSize(new Dimension(300, 10));
-            bestPlayerComboBox.setFont(new Font("Sans", Font.PLAIN, 20));
-
             JLabel bestPlayerLabel = new JLabel("Melhor jogador:");
             bestPlayerLabel.setFont(font);
+
+            JComboBox<String> bestPlayerComboBox = new JComboBox<>(Util.getPlayersWithScore(players));
+            bestPlayerComboBox.setFont(font);
+            bestPlayerComboBox.setSelectedItem(null);
+            bestPlayerComboBox.setPreferredSize(new Dimension(300, 10));
+            bestPlayerComboBox.setFont(new Font("Sans", Font.PLAIN, 20));
 
             rightPanel.add(bestPlayerLabel);
 
             rightPanel.add(bestPlayerComboBox, "span 2, wrap");
 
-            JComboBox<String> bestScoreComboBox = new JComboBox<>(Util.getPlayersName(players));
-            bestScoreComboBox.setFont(font);
-            bestScoreComboBox.setSelectedIndex(-1);
-            bestScoreComboBox.setPreferredSize(new Dimension(300, 10));
-            bestScoreComboBox.setFont(new Font("Sans", Font.PLAIN, 20));
+            JLabel beautifulScoreLabel = new JLabel("Gol mais bonito:");
+            beautifulScoreLabel.setFont(font);
 
-            JLabel bestScoreLabel = new JLabel("Melhor gol:");
-            bestScoreLabel.setFont(font);
+            JComboBox<String> beautifulScoreComboBox = new JComboBox<>(Util.getPlayersWithScore(players));
+            beautifulScoreComboBox.setFont(font);
+            beautifulScoreComboBox.setSelectedItem(null);
+            beautifulScoreComboBox.setPreferredSize(new Dimension(300, 10));
+            beautifulScoreComboBox.setFont(new Font("Sans", Font.PLAIN, 20));
 
-            rightPanel.add(bestScoreLabel);
+            rightPanel.add(beautifulScoreLabel);
 
-            rightPanel.add(bestScoreComboBox, "span 2, wrap");
+            rightPanel.add(beautifulScoreComboBox, "span 2, wrap");
 
             JPanel dateTimePanel = new JPanel(new MigLayout("fill", "[grow]", "[]"));
 
@@ -559,38 +562,83 @@ public class Components {
                     Integer.parseInt(teamAScoreField.getText());
 
                     Integer.parseInt(teamBScoreField.getText());
-                } catch (NumberFormatException nfe) {
+
+                    if (Objects.nonNull(bestPlayerComboBox.getSelectedItem())) {
+                        String selectedBestPlayer = (String) bestPlayerComboBox.getSelectedItem();
+
+                        String selectedBeautifulScorePlayer = (String) beautifulScoreComboBox.getSelectedItem();
+
+                        Player bestPlayer = players.stream().filter(player -> player.getName().equals(selectedBestPlayer)).findFirst().orElse(null);
+
+                        Player beautifulScorePlayer = players.stream().filter(player -> player.getName().equals(selectedBeautifulScorePlayer)).findFirst().orElse(null);
+
+                        if (bestPlayer != null) {
+                            bestPlayer.setBestPlayer();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "O melhor jogador selecionado não foi encontrado.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+
+                        int totalScore = 0;
+
+                        for (Player player : players) {
+                            totalScore += player.getScore();
+                        }
+
+                        if (beautifulScorePlayer != null && totalScore > 0 && beautifulScorePlayer.getScore() > 0) {
+                            beautifulScorePlayer.setBeautifulScore();
+                        } else if (totalScore > 0) {
+                            JOptionPane.showMessageDialog(this, "Um jogador ou uma partida sem gols não pode ter o gol mais bonito.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                            beautifulScoreComboBox.setSelectedItem(null);
+                            return;
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Um jogo ou jogador sem gols não pode ter o gol mais bonito", "Aviso", JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+
+                        if (Integer.parseInt(teamAScoreField.getText()) + Integer.parseInt(teamBScoreField.getText()) == totalScore) {
+                            ResultSet rs = Util.saveMatch(dateTimeField.getText(), teamAScoreField.getText(), teamBScoreField.getText(), beautifulScorePlayer != null ? beautifulScorePlayer.getId() : 0, bestPlayer.getId());
+
+                            if (rs.next()) {
+                                int idMatch = rs.getInt("id_match");
+
+                                for (Player player : players) {
+                                    int id = player.getId();
+
+                                    if (id != 0) {
+                                        try {
+                                            Util.relateMatchPlayer(idMatch, id, player.getScore());
+
+                                            Util.updateScores(id, idMatch);
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                            System.out.println("Erro com a partida.");
+                                            return;
+                                        }
+                                    } else {
+                                        System.out.println("Não foi possível relacionar o jogador " + player.getName() + " com a partida.");
+                                        return;
+                                    }
+                                }
+
+                                Util.updateBeautifulScoreBestPlayer(idMatch);
+                            } else {
+                                JOptionPane.showMessageDialog(this, "A soma dos gols dos times não é igual ao total de gols.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+
+                            JOptionPane.showMessageDialog(this, "Partida salva com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Erro ao salvar partida.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Selecione o melhor jogador ou o gol mais bonito.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Insira um número válido para o resultado da partida.", "Aviso", JOptionPane.WARNING_MESSAGE);
-
-                    return;
-                }
-
-                if (Objects.nonNull(bestPlayerComboBox.getSelectedItem()) && Objects.nonNull(bestScoreComboBox.getSelectedItem())) {
-                    for (Player player : players) {
-                        if (player.getName().equals(bestScoreComboBox.getSelectedItem())) {
-                            player.setBeautifulScore();
-                        }
-
-                        if (player.getName().equals(bestPlayerComboBox.getSelectedItem())) {
-                            player.setBestPlayer();
-                        }
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Selecione o melhor jogador e o melhor gol.", "Aviso", JOptionPane.WARNING_MESSAGE);
-                }
-
-                int idMatch = Util.saveMatch(dateTimeField.getText(), teamAScoreField.getText(), teamBScoreField.getText());
-
-                if (idMatch != -1) {
-                    for (Player player : players) {
-                        Util.relateMatchPlayer(idMatch, player.getId());
-                    }
-
-                    JOptionPane.showMessageDialog(this, "Partida salva com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao salvar partida.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             });
             newMatchButton.setBackground(GREEN);

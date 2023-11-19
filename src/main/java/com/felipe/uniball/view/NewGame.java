@@ -16,14 +16,14 @@ import java.util.List;
 import static com.felipe.uniball.Constants.*;
 
 public class NewGame extends JFrame {
-    private static final DefaultTableModel leftModel = new DefaultTableModel(new Object[]{"Nome", "Número", "Posição"}, 0);
+    private static final DefaultTableModel leftModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
     JTable leftTable = new JTable(leftModel);
     List<Player> leftTablePlayers = new ArrayList<>();
 
-    private static final DefaultTableModel middleModel = new DefaultTableModel(new Object[]{"Nome", "Número", "Posição"}, 0);
+    private static final DefaultTableModel middleModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
     JTable middleTable = new JTable(middleModel);
 
-    private static final DefaultTableModel rightModel = new DefaultTableModel(new Object[]{"Nome", "Número", "Posição"}, 0);
+    private static final DefaultTableModel rightModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
     JTable rightTable = new JTable(rightModel);
     List<Player> rightTablePlayers = new ArrayList<>();
 
@@ -63,13 +63,15 @@ public class NewGame extends JFrame {
             final int selectedRow = middleTable.getSelectedRow();
 
             if (selectedRow != -1) {
-                final String name = (String) middleTable.getValueAt(selectedRow, 0);
-                final int number = (int) middleTable.getValueAt(selectedRow, 1);
-                final String position = (String) middleTable.getValueAt(selectedRow, 2);
+                final int id = (int) middleTable.getValueAt(selectedRow, 0);
+                final String name = (String) middleTable.getValueAt(selectedRow, 1);
+                final int number = (int) middleTable.getValueAt(selectedRow, 2);
+                final String position = (String) middleTable.getValueAt(selectedRow, 3);
 
-                leftModel.addRow(new Object[]{name, number, position});
+                leftModel.addRow(new Object[]{id, name, number, position});
 
                 Player p = new Player();
+                p.setId(id);
                 p.setName(name);
                 p.setNumber(number);
                 p.setPosition(position);
@@ -89,11 +91,12 @@ public class NewGame extends JFrame {
             final int selectedRow = leftTable.getSelectedRow();
 
             if (selectedRow != -1) {
-                final String name = (String) leftTable.getValueAt(selectedRow, 0);
-                final int number = (int) leftTable.getValueAt(selectedRow, 1);
-                final String position = (String) leftTable.getValueAt(selectedRow, 2);
+                final int id = (int) leftTable.getValueAt(selectedRow, 0);
+                final String name = (String) leftTable.getValueAt(selectedRow, 1);
+                final int number = (int) leftTable.getValueAt(selectedRow, 2);
+                final String position = (String) leftTable.getValueAt(selectedRow, 3);
 
-                middleModel.addRow(new Object[]{name, number, position});
+                middleModel.addRow(new Object[]{id, name, number, position});
 
                 leftModel.removeRow(selectedRow);
 
@@ -151,14 +154,15 @@ public class NewGame extends JFrame {
             final int selectedRow = middleTable.getSelectedRow();
 
             if (selectedRow != -1) {
-                final String name = (String) middleTable.getValueAt(selectedRow, 0);
-                final int number = (int) middleTable.getValueAt(selectedRow, 1);
-                final String position = (String) middleTable.getValueAt(selectedRow, 2);
+                final int id = (int) middleTable.getValueAt(selectedRow, 0);
+                final String name = (String) middleTable.getValueAt(selectedRow, 1);
+                final int number = (int) middleTable.getValueAt(selectedRow, 2);
+                final String position = (String) middleTable.getValueAt(selectedRow, 3);
 
-                rightModel.addRow(new Object[]{name, number, position});
+                rightModel.addRow(new Object[]{id, name, number, position});
 
                 Player p = new Player();
-
+                p.setId(id);
                 p.setName(name);
                 p.setNumber(number);
                 p.setPosition(position);
@@ -179,11 +183,12 @@ public class NewGame extends JFrame {
             final int selectedRow = rightTable.getSelectedRow();
 
             if (selectedRow != -1) {
-                final String name = (String) rightTable.getValueAt(selectedRow, 0);
-                final int number = (int) rightTable.getValueAt(selectedRow, 1);
-                final String position = (String) rightTable.getValueAt(selectedRow, 2);
+                final int id = (int) rightTable.getValueAt(selectedRow, 0);
+                final String name = (String) rightTable.getValueAt(selectedRow, 1);
+                final int number = (int) rightTable.getValueAt(selectedRow, 2);
+                final String position = (String) rightTable.getValueAt(selectedRow, 3);
 
-                middleModel.addRow(new Object[]{name, number, position});
+                middleModel.addRow(new Object[]{id, name, number, position});
 
                 rightModel.removeRow(selectedRow);
 
@@ -210,6 +215,7 @@ public class NewGame extends JFrame {
             rightModel.setRowCount(0);
 
             dispose();
+
             new Menu();
         });
         returnButton.setBackground(RED);
@@ -272,6 +278,7 @@ public class NewGame extends JFrame {
         List<Player> playerList = Util.getPlayers("id_player", "ASC");
         for (Player player : playerList) {
             middleModel.addRow(new Object[]{
+                    player.getId(),
                     player.getName(),
                     player.getNumber(),
                     player.getPosition(),
