@@ -63,12 +63,11 @@ public class Ranking extends JFrame {
         returnButton.setForeground(Color.WHITE);
         returnButton.setFont(new Font("Tahoma", Font.BOLD, 50));
 
-
         table.getSelectionModel().addListSelectionListener(e -> table.repaint());
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setRowHeight(30);
         table.setDefaultEditor(Object.class, null);
         table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setResizingAllowed(false);
         table.getTableHeader().setFont(new Font("Sans", Font.BOLD, 20));
 
         JScrollPane scrollPane = new JScrollPane(table);

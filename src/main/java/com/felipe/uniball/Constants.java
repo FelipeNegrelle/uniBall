@@ -3,7 +3,7 @@ package com.felipe.uniball;
 import java.awt.*;
 
 public class Constants {
-public static final String UNIBALL = "UNIBALL";
+    public static final String UNIBALL = "UNIBALL";
     public static final String REGISTER = "Registrar";
     public static final String FAILED_LOGIN = "Login falhou. Tente novamente.";
     public static final String SUCCESSFUL_REGISTER = "Registrado com sucesso!";
@@ -15,7 +15,7 @@ public static final String UNIBALL = "UNIBALL";
     public static final String EDIT = "Editar";
     public static final String DELETE = "Apagar";
     public static final String NAME = "Nome";
-    public static final String NUMBER = "Número";
+    public static final String NUMBER = "Número da camisa";
     public static final String POSITION = "Posição";
     public static final String FORGOT = "Esqueci minha senha";
     public static final String SECRET_PHRASE = "Pergunta secreta";

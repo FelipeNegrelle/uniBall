@@ -16,14 +16,14 @@ import java.util.List;
 import static com.felipe.uniball.Constants.*;
 
 public class NewGame extends JFrame {
-    private static final DefaultTableModel leftModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
+    private static final DefaultTableModel leftModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número da camisa", "Posição"}, 0);
     JTable leftTable = new JTable(leftModel);
     List<Player> leftTablePlayers = new ArrayList<>();
 
-    private static final DefaultTableModel middleModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
+    private static final DefaultTableModel middleModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número da camisa", "Posição"}, 0);
     JTable middleTable = new JTable(middleModel);
 
-    private static final DefaultTableModel rightModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição"}, 0);
+    private static final DefaultTableModel rightModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número da camisa", "Posição"}, 0);
     JTable rightTable = new JTable(rightModel);
     List<Player> rightTablePlayers = new ArrayList<>();
 

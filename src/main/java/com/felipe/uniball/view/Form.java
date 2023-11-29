@@ -80,7 +80,7 @@ public class Form extends JFrame {
         registerButton.setForeground(Color.lightGray);
         registerButton.addActionListener(e -> {
             try {
-                new Components.RegistrationDialog(this, true).setVisible(true);
+                new Components.RegistrationDialog(this).setVisible(true);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

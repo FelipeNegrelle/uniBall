@@ -1,6 +1,5 @@
 package com.felipe.uniball.controller;
 
-import com.felipe.uniball.Constants;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.swing.*;

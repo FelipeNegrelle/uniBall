@@ -3,7 +3,6 @@ package com.felipe.uniball.view;
 import com.felipe.uniball.Constants;
 import com.felipe.uniball.controller.Util;
 import com.felipe.uniball.models.Match;
-import com.felipe.uniball.models.Player;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -50,10 +49,10 @@ public class MatchesHistory extends JFrame {
         updatePlayerTable();
 
         table.getSelectionModel().addListSelectionListener(e -> table.repaint());
+        table.setAutoCreateRowSorter(true);
         table.setRowHeight(30);
         table.setDefaultEditor(Object.class, null);
         table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setResizingAllowed(false);
         table.getTableHeader().setFont(new Font("Sans", Font.BOLD, 20));
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -74,7 +73,7 @@ public class MatchesHistory extends JFrame {
                     match.getDateTimeMatch(),
                     match.getScoreA(),
                     match.getScoreB(),
-                    match.getWinner().equals("E") ? "Empate" : match.getWinner(),
+                    match.getWinner().equals("E") ? "Empate" : "Time " + match.getWinner(),
                     match.getBestPlayer(),
                     match.getPlayerBeautifulScore()
             });

@@ -30,7 +30,7 @@ public class Players extends JFrame {
         titleLabel.setForeground(Color.WHITE);
         panel.add(titleLabel, "span, center, gapbottom 15");
 
-        model = new DefaultTableModel(new Object[]{"Código", "Nome", "Número", "Posição", "Usuário"}, 0);
+        model = new DefaultTableModel(new Object[]{"Código", "Nome", "Número da camisa", "Posição", "Usuário"}, 0);
 
         JTable table = new JTable(model);
         table.setFont(new Font("Sans", Font.PLAIN, 20));
@@ -51,7 +51,7 @@ public class Players extends JFrame {
         newPlayer.setForeground(Color.black);
         newPlayer.setFont(new Font("Tahoma", Font.BOLD, 50));
         newPlayer.addActionListener(e -> {
-            new Components.RegistrationDialog(this, false).setVisible(true);
+            new Components.RegistrationDialog(this).setVisible(true);
             updatePlayerTable();
         });
 
@@ -98,25 +98,25 @@ public class Players extends JFrame {
         updatePlayerTable();
 
         table.getSelectionModel().addListSelectionListener(e -> table.repaint());
+        table.setAutoCreateRowSorter(true);
         table.setRowHeight(30);
         table.setDefaultEditor(Object.class, null);
         table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setResizingAllowed(false);
         table.getTableHeader().setFont(new Font("Sans", Font.BOLD, 20));
 
         JScrollPane scrollPane = new JScrollPane(table);
-        panel.add(scrollPane, "span, align center, grow");
-        panel.add(returnButton, "split 4, align left");
-        panel.add(newPlayer, "align right");
-        panel.add(editPlayer, "align center");
-        panel.add(deletePlayer, "align right");
+        panel.add(scrollPane, "wrap, align center, grow");
+        panel.add(returnButton, "split 4, align left, grow");
+        panel.add(newPlayer, "align right, grow");
+        panel.add(editPlayer, "align center, grow");
+        panel.add(deletePlayer, "align right, grow");
 
         add(panel, "align center, grow");
         pack();
         setVisible(true);
     }
 
-    private static void updatePlayerTable(){
+    private static void updatePlayerTable() {
         model.setRowCount(0);
 
         List<Player> playerList = Util.getPlayers("id_player", "ASC");

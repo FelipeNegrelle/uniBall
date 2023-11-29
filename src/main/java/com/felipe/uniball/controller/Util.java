@@ -5,7 +5,6 @@ import com.felipe.uniball.models.Player;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,7 +229,7 @@ public class Util {
 
     public static void updateScores(int idPlayer, int idMatch) {
         final String query = "UPDATE players SET score = score + (SELECT player_match_score FROM matches_players WHERE id_player = ? AND id_match = ?) WHERE id_player = ?";
-//        final String query = "SELECT player_match_score FROM matches_players WHERE id_player = ? AND id_match = ?";
+
         try {
             Database.execute(query, new Object[]{
                     idPlayer,

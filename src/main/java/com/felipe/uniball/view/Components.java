@@ -1,12 +1,9 @@
 package com.felipe.uniball.view;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -29,7 +26,7 @@ public class Components {
     }
 
     public static class RegistrationDialog extends JDialog {
-        public RegistrationDialog(JFrame parent, boolean hasPrivacyPolicy) {
+        public RegistrationDialog(JFrame parent) {
             super(parent, REGISTER, true);
             setSize(800, 600);
             setLocationRelativeTo(parent);
@@ -101,13 +98,6 @@ public class Components {
             panel.add(registerButton, "span 2, align center");
 
             registerButton.addActionListener(e -> {
-                if (hasPrivacyPolicy) {
-                    if (!privacyPolicy()) {
-                        System.out.println("Não aceitou");
-                        return;
-                    }
-                }
-
                 if (Util.isNumber(numberField.getText())
                         && Objects.nonNull(positionField.getSelectedItem())
                         && Objects.nonNull(usernameField.getText())
@@ -133,8 +123,6 @@ public class Components {
                     System.out.println(numberField.getText());
                     JOptionPane.showMessageDialog(RegistrationDialog.this, FAILED_REGISTER, Constants.ERROR, JOptionPane.ERROR_MESSAGE);
                 }
-
-                dispose();
             });
 
             add(panel);
@@ -239,13 +227,6 @@ public class Components {
 
             add(panel);
         }
-    }
-
-    private static boolean privacyPolicy() {
-        JDialog dialog = new JDialog();
-        dialog.setAlwaysOnTop(true);
-        int result = JOptionPane.showConfirmDialog(dialog, "Ao utilizar o Uniball, você concorda com os termos de uso e a política de privacidade.", "Política de privacidade", JOptionPane.YES_NO_OPTION);
-        return result == JOptionPane.YES_OPTION;
     }
 
     public static class GetUserForgetPasswordDialog extends JDialog {
@@ -386,6 +367,9 @@ public class Components {
 
             Font font = new Font("Sans", Font.PLAIN, 20);
 
+            JTextField teamAScoreField = new JTextField("0", 5);
+            JTextField teamBScoreField = new JTextField("0", 5);
+
             final List<Player> players = new ArrayList<>();
             players.addAll(teamAPlayers);
             players.addAll(teamBPlayers);
@@ -396,10 +380,10 @@ public class Components {
 
             JTable playersTable = new JTable(playersTableModel);
             playersTable.getSelectionModel().addListSelectionListener(e -> playersTable.repaint());
+            playersTable.setAutoCreateRowSorter(true);
             playersTable.setRowHeight(30);
             playersTable.setDefaultEditor(Object.class, null);
             playersTable.getTableHeader().setReorderingAllowed(false);
-            playersTable.getTableHeader().setResizingAllowed(false);
             playersTable.getTableHeader().setFont(font);
             playersTable.setSelectionBackground(GREEN);
             playersTable.setSelectionForeground(Color.WHITE);
@@ -455,6 +439,20 @@ public class Components {
                     playersTableModel.setValueAt(player.getName(), selectedRow, 0);
                     playersTableModel.setValueAt(player.getScore(), selectedRow, 1);
                     playersTableModel.setValueAt(player.getTeam(), selectedRow, 2);
+
+                    int teamAScore = 0;
+                    int teamBScore = 0;
+
+                    for (Player p : players) {
+                        if (p.getTeam() == 'A') {
+                            teamAScore += p.getScore();
+                        } else {
+                            teamBScore += p.getScore();
+                        }
+                    }
+
+                    teamAScoreField.setText(String.valueOf(teamAScore));
+                    teamBScoreField.setText(String.valueOf(teamBScore));
                 } else {
                     JOptionPane.showMessageDialog(this, "Selecione um jogador para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
@@ -485,17 +483,17 @@ public class Components {
             teamALabel.setFont(font);
             teamALabel.setHorizontalAlignment(JLabel.CENTER);
 
-            JTextField teamAScoreField = new JTextField("0", 5);
             teamAScoreField.setFont(font);
             teamAScoreField.setHorizontalAlignment(JTextField.CENTER);
+            teamAScoreField.setEditable(false);
 
             JLabel xLabel = new JLabel("X");
             xLabel.setFont(font);
             xLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            JTextField teamBScoreField = new JTextField("0", 5);
             teamBScoreField.setFont(font);
             teamBScoreField.setHorizontalAlignment(JTextField.CENTER);
+            teamBScoreField.setEditable(false);
 
             JLabel teamBLabel = new JLabel("Time B");
             teamBLabel.setFont(font);

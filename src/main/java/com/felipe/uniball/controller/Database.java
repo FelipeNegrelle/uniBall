@@ -35,7 +35,6 @@ public class Database {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-//            System.out.println("Database error: " + e.getMessage());
         }
         return null;
     }

@@ -52,7 +52,10 @@ public class Menu extends JFrame {
         });
 
         JButton sair = new JButton("Sair");
-        sair.addActionListener(e -> System.exit(0));
+        sair.addActionListener(e -> {
+            new Form();
+            dispose();
+        });
 
         players.setPreferredSize(new Dimension(400, 150));
         players.setBackground(Color.white);
