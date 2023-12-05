@@ -15,7 +15,6 @@ public class Form extends JFrame {
         super(Constants.LOGIN);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new MigLayout("fill, insets 10", "[grow]", "[grow]"));
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(GREEN);
 
         JPanel mainPanel = new JPanel(new MigLayout("fill, insets 20", "[grow]", "[align center]"));
@@ -107,5 +106,6 @@ public class Form extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }

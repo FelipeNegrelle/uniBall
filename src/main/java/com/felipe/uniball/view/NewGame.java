@@ -16,21 +16,20 @@ import java.util.List;
 import static com.felipe.uniball.Constants.*;
 
 public class NewGame extends JFrame {
+    private static final String[] requiredPositions = {"Goleiro", "Atacante", "Meio-campo", "Zagueiro", "Lateral"};
     private static final DefaultTableModel leftModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número da camisa", "Posição"}, 0);
-    JTable leftTable = new JTable(leftModel);
-    List<Player> leftTablePlayers = new ArrayList<>();
-
+    private final JTable leftTable = new JTable(leftModel);
+    private final List<Player> leftTablePlayers = new ArrayList<>();
     private static final DefaultTableModel middleModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número da camisa", "Posição"}, 0);
-    JTable middleTable = new JTable(middleModel);
-
+    private final JTable middleTable = new JTable(middleModel);
+    private final List<Player> middleTablePlayers = new ArrayList<>();
     private static final DefaultTableModel rightModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Número da camisa", "Posição"}, 0);
-    JTable rightTable = new JTable(rightModel);
-    List<Player> rightTablePlayers = new ArrayList<>();
+    private final JTable rightTable = new JTable(rightModel);
+    private final List<Player> rightTablePlayers = new ArrayList<>();
 
     public NewGame() {
         super(Constants.NEW_GAME);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new MigLayout("fill, insets 0, align center", "[fill]", "[fill]"));
 
         JPanel mainPanel = new JPanel(new MigLayout("align center, wrap 3", "[grow]", "[grow]"));
@@ -78,6 +77,8 @@ public class NewGame extends JFrame {
                 leftTablePlayers.add(p);
 
                 middleModel.removeRow(selectedRow);
+
+                middleTablePlayers.remove(p);
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione um jogador para adicionar ao time A", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
             }
@@ -95,6 +96,13 @@ public class NewGame extends JFrame {
                 final String name = (String) leftTable.getValueAt(selectedRow, 1);
                 final int number = (int) leftTable.getValueAt(selectedRow, 2);
                 final String position = (String) leftTable.getValueAt(selectedRow, 3);
+
+                Player p = new Player();
+                p.setId(id);
+                p.setName(name);
+                p.setNumber(number);
+                p.setPosition(position);
+                middleTablePlayers.add(p);
 
                 middleModel.addRow(new Object[]{id, name, number, position});
 
@@ -170,6 +178,8 @@ public class NewGame extends JFrame {
                 rightTablePlayers.add(p);
 
                 middleModel.removeRow(selectedRow);
+
+                middleTablePlayers.remove(p);
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione um jogador para adicionar ao time B", Constants.ERROR, JOptionPane.ERROR_MESSAGE);
             }
@@ -187,6 +197,13 @@ public class NewGame extends JFrame {
                 final String name = (String) rightTable.getValueAt(selectedRow, 1);
                 final int number = (int) rightTable.getValueAt(selectedRow, 2);
                 final String position = (String) rightTable.getValueAt(selectedRow, 3);
+
+                Player p = new Player();
+                p.setId(id);
+                p.setName(name);
+                p.setNumber(number);
+                p.setPosition(position);
+                middleTablePlayers.add(p);
 
                 middleModel.addRow(new Object[]{id, name, number, position});
 
@@ -252,9 +269,9 @@ public class NewGame extends JFrame {
         updatePlayerTable();
 
         add(mainPanel);
-        setLocationRelativeTo(this);
         pack();
         setVisible(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     public boolean hasAllPositions(List<Player> players) {
@@ -262,7 +279,7 @@ public class NewGame extends JFrame {
         for (Player player : players) {
             positions.add(player.getPosition());
         }
-        String[] requiredPositions = {"Goleiro", "Atacante", "Meio-campo", "Zagueiro", "Lateral"};
+
         return positions.containsAll(Arrays.asList(requiredPositions));
     }
 
@@ -272,7 +289,7 @@ public class NewGame extends JFrame {
         }
     }
 
-    private static void updatePlayerTable(){
+    private static void updatePlayerTable() {
         middleModel.setRowCount(0);
 
         List<Player> playerList = Util.getPlayers("id_player", "ASC");

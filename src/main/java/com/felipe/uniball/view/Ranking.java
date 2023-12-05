@@ -16,7 +16,6 @@ public class Ranking extends JFrame {
     public Ranking() {
         super("Ranking");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new MigLayout("fill, insets 0", "[grow]", "[fill]"));
 
         JPanel panel = new JPanel(new MigLayout("wrap 5", "[grow]", "[][grow][]"));
@@ -81,6 +80,7 @@ public class Ranking extends JFrame {
         add(panel, "align center, grow");
         pack();
         setVisible(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     private static void updateRankingTable(String campo) {

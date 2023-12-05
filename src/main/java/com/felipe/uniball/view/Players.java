@@ -19,7 +19,6 @@ public class Players extends JFrame {
     public Players() {
         super(Constants.PLAYERS);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow]"));
 
         JPanel panel = new JPanel(new MigLayout("align center, wrap 4", "[grow]", "[][grow][]"));
@@ -114,6 +113,7 @@ public class Players extends JFrame {
         add(panel, "align center, grow");
         pack();
         setVisible(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     private static void updatePlayerTable() {

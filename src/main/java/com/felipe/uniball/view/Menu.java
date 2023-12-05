@@ -13,7 +13,6 @@ public class Menu extends JFrame {
     public Menu() {
         super("Menu Inicial");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setBackground(GREEN);
 
         JPanel mainPanel = new JPanel(new MigLayout("gapx 50, gapy 50, align center", "[fill]"));
@@ -93,5 +92,6 @@ public class Menu extends JFrame {
         pack();
         setLocationRelativeTo(this);
         setVisible(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }
